@@ -5,17 +5,26 @@ import { LocaleProvider, DatePicker, message } from 'antd';
 import frFR from 'antd/lib/locale-provider/fr_FR';
 import moment from 'moment';
 import 'moment/locale/fr';
-import { List } from 'antd';
+// import { List } from 'antd';
+import { List, Avatar } from 'antd';
 
 moment.locale('fr');
 
-let data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
+const data = [
+    {
+        title: 'Ant Design Title 1',
+    },
+    {
+        title: 'Ant Design Title 2',
+    },
+    {
+        title: 'Ant Design Title 3',
+    },
+    {
+        title: 'Ant Design Title 4',
+    },
 ];
+
 
 class App extends React.Component {
     constructor(props) {
@@ -32,34 +41,19 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
-                <h3 style={{ marginBottom: 16 }}>Default Size</h3>
-                <List
-                    header={<div>Header</div>}
-                    footer={<div>Footer</div>}
-                    bordered
-                    dataSource={data}
-                    renderItem={item => (<List.Item>{item}</List.Item>)}
-                />
-                <h3 style={{ margin: '16px 0' }}>Small Size</h3>
-                <List
-                    size="small"
-                    header={<div>Header</div>}
-                    footer={<div>Footer</div>}
-                    bordered
-                    dataSource={data}
-                    renderItem={item => (<List.Item>{item}</List.Item>)}
-                />
-                <h3 style={{ margin: '16px 0' }}>Large Size</h3>
-                <List
-                    size="large"
-                    header={<div>Header</div>}
-                    footer={<div>Footer</div>}
-                    bordered
-                    dataSource={data}
-                    renderItem={item => (<List.Item>{item}</List.Item>)}
-                />
-            </div>
+            <List
+                itemLayout="horizontal"
+                dataSource={data}
+                renderItem={item => (
+                    <List.Item>
+                        <List.Item.Meta
+                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                            title={<a href="https://ant.design">{item.title}</a>}
+                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                        />
+                    </List.Item>
+                )}
+            />
         );
     }
 }
