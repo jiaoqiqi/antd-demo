@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'moment/locale/fr';
-import {Table} from 'antd';
+import {Table,Avatar,Layout} from 'antd';
 import reqwest from 'reqwest';
 
 moment.locale('fr');
@@ -76,63 +76,70 @@ const data = [
 
 
 class App extends React.Component {
-    state = {
-        data: [],
-        pagination: {},
-        loading: false,
-    };
-    // handleTableChange = (pagination, filters, sorter) => {
-    //     const pager = {...this.state.pagination};
-    //     pager.current = pagination.current;
-    //     this.setState({
-    //         pagination: pager,
-    //     });
-    //     this.fetch({
-    //         results: pagination.pageSize,
-    //         page: pagination.current,
-    //         sortField: sorter.field,
-    //         sortOrder: sorter.order,
-    //         ...filters,
-    //     });
+    // state = {
+    //     data: [],
+    //     pagination: {},
+    //     loading: false,
     // };
-    // fetch = (params = {}) => {
-    //     console.log('params:', params);
-    //     this.setState({loading: true});
-    //     reqwest({
-    //         url: 'https://randomuser.me/api',
-    //         method: 'get',
-    //         data: {
-    //             results: 10,
-    //             ...params,
-    //         },
-    //         type: 'json',
-    //     }).then((data) => {
-    //         const pagination = {...this.state.pagination};
-    //         // Read total count from server
-    //         // pagination.total = data.totalCount;
-    //         pagination.total = 200;
-    //         this.setState({
-    //             loading: false,
-    //             data: data.results,
-    //             pagination,
-    //         });
-    //     });
-    // }
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = {...this.state.pagination};
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({
+            results: pagination.pageSize,
+            page: pagination.current,
+            sortField: sorter.field,
+            sortOrder: sorter.order,
+            ...filters,
+        });
+    };
+    fetch = (params = {}) => {
+        console.log('params:', params);
+        this.setState({loading: true});
+        reqwest({
+            url: 'https://randomuser.me/api',
+            method: 'get',
+            data: {
+                results: 10,
+                ...params,
+            },
+            type: 'json',
+        }).then((data) => {
+            const pagination = {...this.state.pagination};
+            // Read total count from server
+            // pagination.total = data.totalCount;
+            pagination.total = 200;
+            this.setState({
+                loading: false,
+                data: data.results,
+                pagination,
+            });
+        });
+    };
 
-    // componentDidMount() {
-    //     this.fetch();
-    // }
+    componentDidMount() {
+        this.fetch();
+    }
 
     render() {
         return (
-            <Table columns={columns}
-                   data={this.state.data}
-                   // rowKey={record => record.registered}
-                   // dataSource={this.state.data}
-                   // pagination={this.state.pagination}
-                   // loading={this.state.loading}
-                   // onChange={this.handleTableChange}
-            />
+                <Table columns={columns}
+                       dataSource={data}
+
+                    // renderItem={item => (
+                    //     <List.Item>
+                    //         <List.Item.Meta
+                    //             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                    //             title={<a href="https://ant.design">{item.title}</a>}
+                    //             description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                    //         />
+                    //     </List.Item>
+                    // )}
+                />
+
+
         );
     }
 }
