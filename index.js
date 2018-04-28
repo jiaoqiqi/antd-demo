@@ -8,25 +8,31 @@ import reqwest from 'reqwest';
 moment.locale('fr');
 
 const columns = [{
-    title: '排行榜',
+    title: '排行',
     dataIndex: 'rankingList',
     sorter: true,
     width: '10%',
+    // render: (text, record) => (<span>{record.rankingList}</span>)
+    render: (text, record) => (record.rankingList <=3 ?
+        <span> <img src="90-皇冠%20.png" />&nbsp;{record.rankingList}</span> :
+        <span> &nbsp;&nbsp; &nbsp;&nbsp;{record.rankingList}</span>),
 }, {
     title: '用户名',
     dataIndex: 'userName',
     width: '20%',
-    render:(text, record) => <div style={{ height: 50 }}>
-        <img src="cat.jpg" alt="" width={"20px"} height={"20px"} margin-top="10px"/>
-        <span>{record.userName}</span>
+    render: (text, record) => <div style={{height: 50}}>
+        <Avatar src={record.userPic}/>
+        &nbsp;&nbsp;
+        <span> {record.userName}  </span>
+
     </div>
 },
     {
-    title: '描述',
-    dataIndex: 'userInfo',
-    width: '40%',
-        render : (text, record) =>(<span>{record.userInfo}</span>)
-},
+        title: '用户描述',
+        dataIndex: 'userInfo',
+        width: '40%',
+        render: (text, record) => (<span>{record.userInfo}</span>)
+    },
     {
         title: 'AC数',
         dataIndex: 'passNum',
@@ -43,35 +49,41 @@ const columns = [{
 const data = [
     {
         rankingList: 1,
-        userName: "q",
-        userInfo: "Ant Design",
+        userPic:"cat.jpg",
+        userName: "qwe",
+        userInfo: "Ant Design1",
         passNum: 345,
         passRate: 30
+
     },
     {
         rankingList: 2,
-        userName: "w",
-        userInfo: "Ant Design",
+        userPic:"cat.jpg",
+        userName: "wer",
+        userInfo: "Ant Design2",
         passNum: 300,
         passRate: 25
     },
     {
         rankingList: 3,
-        userName: "e",
-        userInfo: "Ant Design",
+        userPic:"cat.jpg",
+        userName: "ert",
+        userInfo: "Ant Design3",
         passNum: 298,
         passRate: 20
     },
     {
         rankingList: 4,
-        userName: "r",
-        userInfo: "Ant Design",
+        userPic:"cat.jpg",
+        userName: "rty",
+        userInfo: "Ant Design4",
         passNum: 257,
         passRate: 15
     }, {
         rankingList: 5,
-        userName: "a",
-        userInfo: "Ant Design",
+        userPic:"cat.jpg",
+        userName: "asd",
+        userInfo: "Ant Design5",
         passNum: 173,
         passRate: 10
     },
@@ -79,60 +91,57 @@ const data = [
 
 
 class App extends React.Component {
-    // state = {
-    //     data: [],
-    //     pagination: {},
-    //     loading: false,
-    // };
-    // handleTableChange = (pagination, filters, sorter) => {
-    //     const pager = {...this.state.pagination};
-    //     pager.current = pagination.current;
-    //     this.setState({
-    //         pagination: pager,
-    //     });
-    //     this.fetch({
-    //         results: pagination.pageSize,
-    //         page: pagination.current,
-    //         sortField: sorter.field,
-    //         sortOrder: sorter.order,
-    //         ...filters,
-    //     });
-    // };
-    // fetch = (params = {}) => {
-    //     console.log('params:', params);
-    //     this.setState({loading: true});
-    //     reqwest({
-    //         url: 'https://randomuser.me/api',
-    //         method: 'get',
-    //         data: {
-    //             results: 10,
-    //             ...params,
-    //         },
-    //         type: 'json',
-    //     }).then((data) => {
-    //         const pagination = {...this.state.pagination};
-    //         // Read total count from server
-    //         // pagination.total = data.totalCount;
-    //         pagination.total = 200;
-    //         this.setState({
-    //             loading: false,
-    //             data: data.results,
-    //             pagination,
-    //         });
-    //     });
-    // };
+    state = {
+        data: [],
+        pagination: {},
+        loading: false,
+    };
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = {...this.state.pagination};
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({
+            results: pagination.pageSize,
+            page: pagination.current,
+            sortField: sorter.field,
+            sortOrder: sorter.order,
+            ...filters,
+        });
+    };
+    fetch = (params = {}) => {
+        console.log('params:', params);
+        this.setState({loading: true});
+        reqwest({
+            url: 'https://randomuser.me/api',
+            method: 'get',
+            data: {
+                results: 10,
+                ...params,
+            },
+            type: 'json',
+        }).then((data) => {
+            const pagination = {...this.state.pagination};
+            // Read total count from server
+            // pagination.total = data.totalCount;
+            pagination.total = 200;
+            this.setState({
+                loading: false,
+                data: data.results,
+                pagination,
+            });
+        });
+    };
 
-    // componentDidMount() {
-    //     this.fetch();
-    // }
+    componentDidMount() {
+        this.fetch();
+    }
 
     render() {
         return (
             <Table columns={columns}
-                // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
                    dataSource={data}
-
-
             />
 
 
