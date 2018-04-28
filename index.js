@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'moment/locale/fr';
-import {Table,Avatar,Layout} from 'antd';
+import {Table,Avatar,Layout,List,Progress} from 'antd';
 import reqwest from 'reqwest';
 
 moment.locale('fr');
@@ -21,6 +21,30 @@ const columns = [{
     //     {text: 'Female', value: 'female'},
     // ],
     width: '15%',
+    render:() => <div>
+        <img src="cat.jpg" alt="" width={"20px"} height={"20px"}/>
+        <span>{data.map(userdata=> userdata.userName)}</span>
+    </div>
+
+    // render: () =>
+    //     <List
+    //         itemLayout="horizontal"
+    //         dataSource={data}
+    //         // renderItem={item => (
+    //         //     <List.Item>
+    //         //         <List.Item.Meta
+    //         //             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+    //         //             title={<a href="https://ant.design">{item.userName}</a>}
+    //         //             description="Ant Design"
+    //         //         />
+    //         //     </List.Item>
+    //         // )}
+    //         avatar={<Avatar src="cat.jpg" />}
+    //         // title = {d.map(userdata=> userdata.userName)}
+    //         // title={<a href="https://ant.design">{data.userName}</a>}
+    //         description="Ant Design"
+    //     />
+
 }, {
     title: '描述',
     dataIndex: 'userInfo',
@@ -33,6 +57,7 @@ const columns = [{
     title: '通过率',
     dataIndex: 'passRate',
     width: '15%',
+    render: ()=> <Progress percent={30} size="small"/>
 }];
 
 
@@ -41,34 +66,34 @@ const data = [
     {
         rankingList : 1,
         userName : "q",
-        userInfo : "snfjdsjfnvlksafiumasdkfdshfmsdkvnask",
+        userInfo : "Ant Design",
         passNum : 345,
         passRate : 30
     },
     {
         rankingList : 2,
         userName : "w",
-        userInfo : "snfjdsjfnvlksafiumasdkfdshfmsdkvnask",
+        userInfo : "Ant Design",
         passNum : 300,
         passRate : 25
     },
     {
         rankingList : 3,
         userName : "e",
-        userInfo : "snfjdsjfnvlksafiumasdkfdshfmsdkvnask",
+        userInfo : "Ant Design",
         passNum : 298,
         passRate : 20
     },
     {
         rankingList : 4,
         userName : "r",
-        userInfo : "snfjdsjfnvlksafiumasdkfdshfmsdkvnask",
+        userInfo : "Ant Design",
         passNum : 257,
         passRate : 15
     },{
         rankingList : 5,
         userName : "a",
-        userInfo : "snfjdsjfnvlksafiumasdkfdshfmsdkvnask",
+        userInfo : "Ant Design",
         passNum : 173,
         passRate : 10
     },
@@ -126,6 +151,7 @@ class App extends React.Component {
     render() {
         return (
                 <Table columns={columns}
+                       // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
                        dataSource={data}
 
                     // renderItem={item => (
