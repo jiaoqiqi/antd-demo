@@ -11,53 +11,22 @@ const columns = [{
     title: '排行榜',
     dataIndex: 'rankingList',
     sorter: true,
-    // render: name => `${name.first} ${name.last}`,
     width: '10%',
 }, {
     title: '用户名',
     dataIndex: 'userName',
-    width: '40%',
-    // render:() => <div style={{ height: 50 }}>
-    //     <img src="cat.jpg" alt="" width={"20px"} height={"20px"}/>
-    //     <span>{data.map(userdata=> userdata.userName)}</span>
-    // </div>
-
-    render: (text, record) => (
-        <List
-            itemLayout="horizontal"
-            dataSource={data}
-            renderItem={text => (
-                <List.Item>
-                    <List.Item.Meta
-                        avatar={<Avatar src="cat.jpg"/>}
-                        title={<a href="https://ant.design">{record.userName}</a>}
-                        description="Ant Design, a design language for"
-                    />
-                </List.Item>
-            )}
-        />
-    ),
-
-    // render:()=> <List
-    //     itemLayout="horizontal"
-    //     dataSource={data}
-    //     renderItem={item => (
-    //         <List.Item>
-    //             <List.Item.Meta
-    //                 avatar={<Avatar src="cat.jpg" />}
-    //                 title={<a href="https://ant.design">{item.userName}</a>}
-    //                 description="Ant Design, a design language for"
-    //             />
-    //         </List.Item>
-    //     )}
-    // />
-
+    width: '20%',
+    render:(text, record) => <div style={{ height: 50 }}>
+        <img src="cat.jpg" alt="" width={"20px"} height={"20px"} margin-top="10px"/>
+        <span>{record.userName}</span>
+    </div>
 },
-//     {
-//     title: '描述',
-//     dataIndex: 'userInfo',
-//     width: '20%',
-// },
+    {
+    title: '描述',
+    dataIndex: 'userInfo',
+    width: '40%',
+        render : (text, record) =>(<span>{record.userInfo}</span>)
+},
     {
         title: 'AC数',
         dataIndex: 'passNum',
