@@ -2,45 +2,50 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'moment/locale/fr';
-import { Menu, Icon,Button,Cascader} from 'antd';
+import { Menu, Icon,Button,Cascader,Checkbox} from 'antd';
 moment.locale('fr');
 
-const options = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
+const CheckboxGroup = Checkbox.Group;
 
-function onChange(value) {
-    console.log(value);
-}
-
+const plainOptions = ['Apple', 'Pear', 'Orange'];
+const defaultCheckedList = ['Apple', 'Orange'];
 
 class App extends React.Component {
-
+    state = {
+        checkedList: defaultCheckedList,
+        indeterminate: true,
+        checkAll: false,
+    };
     render() {
         return (
-            <Cascader options={options} onChange={onChange} placeholder="Please select" />
-
+            <div>
+                <div style={{ borderBottom: '1px solid #E9E9E9' }}>
+                    <Checkbox
+                        indeterminate={this.state.indeterminate}
+                        onChange={this.onCheckAllChange}
+                        checked={this.state.checkAll}
+                    >
+                        Check all
+                    </Checkbox>
+                </div>
+                <br />
+                <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange} />
+            </div>
         );
+    }
+    onChange = (checkedList) => {
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+            checkAll: checkedList.length === plainOptions.length,
+        });
+    }
+    onCheckAllChange = (e) => {
+        this.setState({
+            checkedList: e.target.checked ? plainOptions : [],
+            indeterminate: false,
+            checkAll: e.target.checked,
+        });
     }
 }
 
