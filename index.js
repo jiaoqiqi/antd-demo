@@ -3,50 +3,45 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'moment/locale/fr';
 import { List, Avatar } from 'antd';
+import { Menu, Dropdown, Icon } from 'antd';
+
 
 
 moment.locale('fr');
 
 
-const data = [
-    {
-        title: 'Ant Design Title 1',
-    },
-    {
-        title: 'Ant Design Title 2',
-    },
-    {
-        title: 'Ant Design Title 3',
-    },
-    {
-        title: 'Ant Design Title 4',
-    },
-];
+const menu = (
+    <Menu>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item</a>
+        </Menu.Item>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">2nd menu item</a>
+        </Menu.Item>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">3rd menu item</a>
+        </Menu.Item>
+        <Menu.Item disabled>3rd menu item（disabled）</Menu.Item>
 
-class UserList extends React.Component {
+    </Menu>
+);
+
+class App extends React.Component {
 
     render() {
 
         return (
-            <List
-                itemLayout="horizontal"
-                dataSource={data}
-                renderItem={item => (
-                    <List.Item>
-                        <List.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                            title={<a href="https://ant.design">{item.title}</a>}
-                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                        />
-                    </List.Item>
-                )}
-            />
+            <Dropdown overlay={menu}>
+                <a className="ant-dropdown-link" href="#">
+                    Hover me <Icon type="down" />
+                </a>
+            </Dropdown>
         );
     }
 }
 
 // const WrappedRegistrationForm = Form.create()(RegistrationForm);
-ReactDOM.render(<UserList/>, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
 
 
 // ReactDOM.render(<WrappedRegistrationForm />, mountNode);
