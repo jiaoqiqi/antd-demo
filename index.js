@@ -2,334 +2,51 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'moment/locale/fr';
-import {Table, Avatar, Layout, List, Progress} from 'antd';
-import reqwest from 'reqwest';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
-const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
+import { List, Avatar } from 'antd';
+
 
 moment.locale('fr');
-const residences = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
-
-// const columns = [{
-//     title: '排行',
-//     dataIndex: 'rankingList',
-//     sorter: true,
-//     width: '10%',
-//     // render: (text, record) => (<span>{record.rankingList}</span>)
-//     render: (text, record) => (record.rankingList <=3 ?
-//         <span> <img src="90-皇冠%20.png" />&nbsp;{record.rankingList}</span> :
-//         <span> &nbsp;&nbsp; &nbsp;&nbsp;{record.rankingList}</span>),
-// }, {
-//     title: '用户名',
-//     dataIndex: 'userName',
-//     width: '20%',
-//     render: (text, record) => <div style={{height: 50}}>
-//         <Avatar src={record.userPic}/>
-//         &nbsp;&nbsp;
-//         <span> {record.userName}  </span>
-//
-//     </div>
-// },
-//     {
-//         title: '用户描述',
-//         dataIndex: 'userInfo',
-//         width: '40%',
-//         render: (text, record) => (<span>{record.userInfo}</span>)
-//     },
-//     {
-//         title: 'AC数',
-//         dataIndex: 'passNum',
-//         width: '10%',
-//         render: (text, record) => <div>{record.passNum}</div>
-//     }, {
-//         title: '通过率',
-//         dataIndex: 'passRate',
-//         width: '15%',
-//         render: (text, record) => <Progress percent={record.passRate} size="small"/>
-//     }];
-//
-//
-// const data = [
-//     {
-//         rankingList: 1,
-//         userPic:"cat.jpg",
-//         userName: "qwe",
-//         userInfo: "Ant Design1",
-//         passNum: 345,
-//         passRate: 30
-//
-//     },
-//     {
-//         rankingList: 2,
-//         userPic:"cat.jpg",
-//         userName: "wer",
-//         userInfo: "Ant Design2",
-//         passNum: 300,
-//         passRate: 25
-//     },
-//     {
-//         rankingList: 3,
-//         userPic:"cat.jpg",
-//         userName: "ert",
-//         userInfo: "Ant Design3",
-//         passNum: 298,
-//         passRate: 20
-//     },
-//     {
-//         rankingList: 4,
-//         userPic:"cat.jpg",
-//         userName: "rty",
-//         userInfo: "Ant Design4",
-//         passNum: 257,
-//         passRate: 15
-//     }, {
-//         rankingList: 5,
-//         userPic:"cat.jpg",
-//         userName: "asd",
-//         userInfo: "Ant Design5",
-//         passNum: 173,
-//         passRate: 10
-//     },
-// ];
 
 
-class RegistrationForm extends React.Component {
-    state = {
-        confirmDirty: false,
-        autoCompleteResult: [],
-    };
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    }
-    handleConfirmBlur = (e) => {
-        const value = e.target.value;
-        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-    }
-    compareToFirstPassword = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
-        } else {
-            callback();
-        }
-    }
-    validateToNextPassword = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && this.state.confirmDirty) {
-            form.validateFields(['confirm'], { force: true });
-        }
-        callback();
-    }
-    handleWebsiteChange = (value) => {
-        let autoCompleteResult;
-        if (!value) {
-            autoCompleteResult = [];
-        } else {
-            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        this.setState({ autoCompleteResult });
-    }
+const data = [
+    {
+        title: 'Ant Design Title 1',
+    },
+    {
+        title: 'Ant Design Title 2',
+    },
+    {
+        title: 'Ant Design Title 3',
+    },
+    {
+        title: 'Ant Design Title 4',
+    },
+];
+
+class UserList extends React.Component {
+
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const { autoCompleteResult } = this.state;
-
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
-        })(
-            <Select style={{ width: 70 }}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        );
-
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
 
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <FormItem
-                    {...formItemLayout}
-                    label="E-mail"
-                >
-                    {getFieldDecorator('email', {
-                        rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
-                        }, {
-                            required: true, message: 'Please input your E-mail!',
-                        }],
-                    })(
-                        <Input />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="Password"
-                >
-                    {getFieldDecorator('password', {
-                        rules: [{
-                            required: true, message: 'Please input your password!',
-                        }, {
-                            validator: this.validateToNextPassword,
-                        }],
-                    })(
-                        <Input type="password" />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="Confirm Password"
-                >
-                    {getFieldDecorator('confirm', {
-                        rules: [{
-                            required: true, message: 'Please confirm your password!',
-                        }, {
-                            validator: this.compareToFirstPassword,
-                        }],
-                    })(
-                        <Input type="password" onBlur={this.handleConfirmBlur} />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label={(
-                        <span>
-              Nickname&nbsp;
-                            <Tooltip title="What do you want others to call you?">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
-                    )}
-                >
-                    {getFieldDecorator('nickname', {
-                        rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-                    })(
-                        <Input />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="Habitual Residence"
-                >
-                    {getFieldDecorator('residence', {
-                        initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-                        rules: [{ type: 'array', required: true, message: 'Please select your habitual residence!' }],
-                    })(
-                        <Cascader options={residences} />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="Phone Number"
-                >
-                    {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: 'Please input your phone number!' }],
-                    })(
-                        <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="Website"
-                >
-                    {getFieldDecorator('website', {
-                        rules: [{ required: true, message: 'Please input website!' }],
-                    })(
-                        <AutoComplete
-                            dataSource={websiteOptions}
-                            onChange={this.handleWebsiteChange}
-                            placeholder="website"
-                        >
-                            <Input />
-                        </AutoComplete>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="Captcha"
-                    extra="We must make sure that your are a human."
-                >
-                    <Row gutter={8}>
-                        <Col span={12}>
-                            {getFieldDecorator('captcha', {
-                                rules: [{ required: true, message: 'Please input the captcha you got!' }],
-                            })(
-                                <Input />
-                            )}
-                        </Col>
-                        <Col span={12}>
-                            <Button>Get captcha</Button>
-                        </Col>
-                    </Row>
-                </FormItem>
-                <FormItem {...tailFormItemLayout}>
-                    {getFieldDecorator('agreement', {
-                        valuePropName: 'checked',
-                    })(
-                        <Checkbox>I have read the <a href="">agreement</a></Checkbox>
-                    )}
-                </FormItem>
-                <FormItem {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">Register</Button>
-                </FormItem>
-            </Form>
+            <List
+                itemLayout="horizontal"
+                dataSource={data}
+                renderItem={item => (
+                    <List.Item>
+                        <List.Item.Meta
+                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                            title={<a href="https://ant.design">{item.title}</a>}
+                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                        />
+                    </List.Item>
+                )}
+            />
         );
     }
 }
 
-const WrappedRegistrationForm = Form.create()(RegistrationForm);
-ReactDOM.render(<WrappedRegistrationForm/>, document.getElementById('root'));
+// const WrappedRegistrationForm = Form.create()(RegistrationForm);
+ReactDOM.render(<UserList/>, document.getElementById('root'));
 
 
 // ReactDOM.render(<WrappedRegistrationForm />, mountNode);
