@@ -2,51 +2,58 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'moment/locale/fr';
-import { Menu, Icon,Button,Cascader,Checkbox} from 'antd';
+import "./index.css"
+import { Form, Icon, Input, Button, Checkbox } from 'antd';
 moment.locale('fr');
 
-const CheckboxGroup = Checkbox.Group;
-
-const plainOptions = ['Apple', 'Pear', 'Orange'];
-const defaultCheckedList = ['Apple', 'Orange'];
+const FormItem = Form.Item;
 
 class App extends React.Component {
-    state = {
-        checkedList: defaultCheckedList,
-        indeterminate: true,
-        checkAll: false,
-    };
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+            }
+        });
+    }
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
-            <div>
-                <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-                    <Checkbox
-                        indeterminate={this.state.indeterminate}
-                        onChange={this.onCheckAllChange}
-                        checked={this.state.checkAll}
-                    >
-                        Check all
-                    </Checkbox>
-                </div>
-                <br />
-                <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange} />
-            </div>
+            <Form onSubmit={this.handleSubmit} className="login-form">
+                <FormItem>
+                    {getFieldDecorator('userName', {
+                        rules: [{ required: true, message: 'Please input your username!' }],
+                    })(
+                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+                    )}
+                </FormItem>
+                <FormItem>
+                    {getFieldDecorator('password', {
+                        rules: [{ required: true, message: 'Please input your Password!' }],
+                    })(
+                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+                    )}
+                </FormItem>
+                <FormItem>
+                    {getFieldDecorator('remember', {
+                        valuePropName: 'checked',
+                        initialValue: true,
+                    })(
+                        <Checkbox>Remember me</Checkbox>
+                    )}
+                    <a className="login-form-forgot" href="">Forgot password</a>
+                    <Button type="primary" htmlType="submit" className="login-form-button">
+                        Log in
+                    </Button>
+                    Or <a href="">register now!</a>
+                </FormItem>
+            </Form>
         );
-    }
-    onChange = (checkedList) => {
-        this.setState({
-            checkedList,
-            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
-            checkAll: checkedList.length === plainOptions.length,
-        });
-    }
-    onCheckAllChange = (e) => {
-        this.setState({
-            checkedList: e.target.checked ? plainOptions : [],
-            indeterminate: false,
-            checkAll: e.target.checked,
-        });
     }
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+const Appp = Form.create()(App);
+
+
+ReactDOM.render(<Appp/>, document.getElementById('root'));
